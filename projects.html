@@ -79,14 +79,13 @@
       </section>
 
       <section id="grid" class="grid">
-        <!-- Editable manual cards -->
+        <!-- Your editable manual cards -->
         <article class="card" data-tags="ml python" data-search="gpt2 llm pytorch cuda fineweb hellaswag">
           <h3>GPT-2 LLM (124M) — from scratch</h3>
           <p class="muted">PyTorch • CUDA • Evaluation on HellaSwag with improved accuracy vs. baseline.</p>
           <div class="tags"><span class="tag">ML</span><span class="tag">Python</span></div>
           <div class="links">
             <a class="btn" href="https://github.com/USERNAME/gpt2-from-scratch" target="_blank" rel="noreferrer">Code</a>
-            <!-- <a class="btn" href="#" target="_blank" rel="noreferrer">Demo</a> -->
           </div>
         </article>
 
@@ -125,7 +124,6 @@
           else root.removeAttribute('data-theme');
           localStorage.setItem('theme', mode);
         }
-
         function initTheme() {
           try {
             const saved = localStorage.getItem('theme');
@@ -134,22 +132,15 @@
             if (initial === 'light') root.setAttribute('data-theme', 'light');
           } catch (_) {}
         }
-
-        function ready(fn){
-          if (document.readyState !== 'loading') fn();
-          else document.addEventListener('DOMContentLoaded', fn);
-        }
+        function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
 
         initTheme();
-
         ready(function () {
           const toggle = document.getElementById('themeToggle');
-          if (toggle) {
-            toggle.addEventListener('click', () => {
-              const isLight = root.getAttribute('data-theme') === 'light';
-              setTheme(isLight ? '' : 'light');
-            });
-          }
+          if (toggle) toggle.addEventListener('click', () => {
+            const isLight = root.getAttribute('data-theme') === 'light';
+            setTheme(isLight ? '' : 'light');
+          });
 
           const year = document.getElementById('y');
           if (year) year.textContent = new Date().getFullYear();
@@ -159,16 +150,16 @@
             const obs = new IntersectionObserver((entries) => {
               entries.forEach(e => {
                 if (e.isIntersecting) {
-                  e.target.style.transition = 'transform .5s ease, opacity .5s ease';
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.opacity = '1';
+                  e.target.style.transition='transform .5s ease, opacity .5s ease';
+                  e.target.style.transform='translateY(0)';
+                  e.target.style.opacity='1';
                 }
               });
             }, { threshold: .1 });
             document.querySelectorAll('.card').forEach(c => obs.observe(c));
           } catch (_) {}
 
-          // Filtering + search
+          // Filter + search
           const chips = Array.from(document.querySelectorAll('.chip'));
           const cards = Array.from(document.querySelectorAll('.card'));
           const search = document.getElementById('search');
@@ -207,7 +198,7 @@
               const repos = await res.json();
               const grid = document.getElementById('grid');
               repos.slice(0, 9).forEach(r => {
-                if (r.fork) return; // skip forks
+                if (r.fork) return;
                 const card = document.createElement('article');
                 card.className = 'card';
                 card.dataset.tags = 'fullstack';
@@ -222,12 +213,8 @@
                   </div>
                 `;
                 grid.appendChild(card);
-                // animate in
-                try {
-                  obs.observe(card);
-                } catch (_) {
-                  card.style.opacity = '1';
-                  card.style.transform = 'translateY(0)';
+                try { obs.observe(card); } catch (_) {
+                  card.style.opacity='1'; card.style.transform='translateY(0)';
                 }
               });
             } catch (_) {}
