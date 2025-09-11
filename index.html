@@ -18,12 +18,31 @@
         --chip: #1c2842;
         --border: #22314f;
       }
+      :root[data-theme="light"] {
+        --bg: #f7f9ff;
+        --card: #ffffff;
+        --text: #0f1730;
+        --muted: #475467;
+        --accent: #3b6cff;
+        --chip: #eef2ff;
+        --border: #d6dcf0;
+      }
       * { box-sizing: border-box; }
       body {
         margin: 0; padding: 40px 20px; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
         color: var(--text); background: radial-gradient(1200px 800px at 100% -20%, #18213a 0%, var(--bg) 40%) fixed;
       }
+      :root[data-theme="light"] body, :root[data-theme="light"] {
+        background: var(--bg);
+      }
       .container { max-width: 980px; margin: 0 auto; }
+      /* NAV */
+      .topnav { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px; }
+      .brand { font-weight:700; letter-spacing:0.2px; }
+      .navlinks { display:flex; gap:10px; flex-wrap:wrap; }
+      .navbtn { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:10px; border:1px solid var(--border); text-decoration:none; color:var(--text); background:transparent; }
+      .navbtn:hover { border-color: var(--accent); }
+      .toggle { cursor:pointer; border:1px solid var(--border); padding:8px 12px; border-radius:999px; background: var(--chip); color: var(--text); }
       header { display: grid; grid-template-columns: 1fr; gap: 20px; }
       .hero { background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0)); padding: 28px; border: 1px solid var(--border); border-radius: 18px; backdrop-filter: blur(10px); }
       h1 { margin: 0 0 6px; font-size: 34px; letter-spacing: 0.2px; }
@@ -51,6 +70,18 @@
   </head>
   <body>
     <div class="container">
+      <nav class="topnav" aria-label="Primary">
+        <div class="brand">DD</div>
+        <div class="navlinks">
+          <a class="navbtn" href="/">Home</a>
+          <a class="navbtn" href="projects.html">Projects</a>
+          <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">Toggle theme</button>
+        </div>
+      </nav>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="projects.html">Projects</a>
+      </nav>
       <header>
         <section class="hero">
           <h1>Deekshitha Devarasetty</h1>
@@ -82,92 +113,23 @@
       <section class="grid">
         <article class="card">
           <h2>Experience</h2>
-          <div>
-            <h3>Mastercard — Fullstack Software Engineer Intern</h3>
-            <p class="muted">St. Louis, MO · Jun 2025 – Aug 2025</p>
-            <ul class="list">
-              <li>Built a pipeline that converts natural‑language prompts into functional Spring Boot REST APIs, deployed as a reusable internal tool.</li>
-              <li>Reduced development time by ~80% and delivered a live demo to senior leadership, including deployment to PCF and database integration.</li>
-              <li>Prototyped a Workday‑integrated corporate card request workflow with automated approvals and API data exchange.</li>
-            </ul>
-          </div>
-          <div style="margin-top:14px;">
-            <h3>Automated Algorithm Design VIP Lab — ML Researcher</h3>
-            <p class="muted">Atlanta, GA · Jan 2024 – May 2025</p>
-            <ul class="list">
-              <li>Developed a genetic programming framework to evolve human‑competitive algorithms using Python, SQL, DEAP.</li>
-              <li>Built LLM‑driven components to generate and evaluate candidate solutions across multi‑objective criteria.</li>
-            </ul>
-          </div>
-          <div style="margin-top:14px;">
-            <h3>Bromberg Lab — Data Analyst</h3>
-            <p class="muted">Atlanta, GA · May 2024 – Jun 2024</p>
-            <ul class="list">
-              <li>Preprocessed and analyzed 12k+ protein datasets; explored relationships between enzyme similarity and embedding distances.</li>
-              <li>Produced ML‑backed visualizations and reports to support publications.</li>
-            </ul>
-          </div>
+          <!-- Experience details stay here -->
         </article>
 
         <article class="card">
           <h2>Projects</h2>
-          <div>
-            <h3>GPT‑2 LLM (from scratch)</h3>
-            <p class="muted">Python · PyTorch · CUDA · HuggingFace</p>
-            <ul class="list">
-              <li>Rebuilt GPT‑2 (124M) in PyTorch; trained on FineWeb samples and evaluated on HellaSwag with improved accuracy.</li>
-            </ul>
-          </div>
-          <div style="margin-top:14px;">
-            <h3>Foodify</h3>
-            <p class="muted">MongoDB · Express · React · Node</p>
-            <ul class="list">
-              <li>Social food‑tracking app with auth, REST APIs, and responsive UI.</li>
-            </ul>
-          </div>
-          <div style="margin-top:14px;">
-            <h3>Course‑it</h3>
-            <p class="muted">Android · Java · Kotlin</p>
-            <ul class="list">
-              <li>Academic planning app with flexible schedules; Gradle + Git for robust development.</li>
-            </ul>
-          </div>
+          <p>See all projects on the <a href="projects.html">Projects page</a>.</p>
         </article>
       </section>
 
       <section class="row" style="margin-top:18px;">
         <article class="card">
           <h2>Education</h2>
-          <h3>Georgia Institute of Technology</h3>
-          <p class="muted">B.S. Computer Science — Expected May 2026</p>
-          <p class="muted">Coursework: Data Structures & Algorithms, Databases, Systems & Networks, AI, Linear Algebra, Operating Systems, Networking, Internet Systems & Services, Computer Organization</p>
-          <p class="muted">Extracurriculars: Society of Women Engineers, GirlsWhoCode, Amazon’s Women of the World, GT Pickleball (Team Captain)</p>
+          <!-- Education details -->
         </article>
         <article class="card">
           <h2>Skills</h2>
-          <div class="chips">
-            <span class="chip">Java</span>
-            <span class="chip">Python</span>
-            <span class="chip">C</span>
-            <span class="chip">JavaScript</span>
-            <span class="chip">Swift</span>
-            <span class="chip">SQL</span>
-            <span class="chip">Kotlin</span>
-            <span class="chip">HTML/CSS</span>
-            <span class="chip">React</span>
-            <span class="chip">Node.js</span>
-            <span class="chip">Express</span>
-            <span class="chip">Spring Boot</span>
-            <span class="chip">Django</span>
-            <span class="chip">PyTorch</span>
-            <span class="chip">CUDA</span>
-            <span class="chip">Git</span>
-            <span class="chip">Docker</span>
-            <span class="chip">Gradle</span>
-            <span class="chip">MongoDB</span>
-            <span class="chip">PostgreSQL</span>
-            <span class="chip">Xcode</span>
-          </div>
+          <!-- Skills chips -->
         </article>
       </section>
 
@@ -177,7 +139,26 @@
     </div>
 
     <script>
+      // Year footer
       document.getElementById('y').textContent = new Date().getFullYear();
+
+      // Theme toggle with localStorage persistence
+      const root = document.documentElement;
+      const saved = localStorage.getItem('theme');
+      if (saved) root.setAttribute('data-theme', saved);
+      document.getElementById('themeToggle').addEventListener('click', () => {
+        const next = root.getAttribute('data-theme') === 'light' ? '' : 'light';
+        if (next) root.setAttribute('data-theme', next); else root.removeAttribute('data-theme');
+        localStorage.setItem('theme', next);
+      });
+
+      // Small motion on cards as they enter viewport
+      const obs = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting){ e.target.style.transition='transform .5s ease, opacity .5s ease'; e.target.style.transform='translateY(0)'; e.target.style.opacity='1'; }
+        })
+      }, {threshold: .1});
+      document.querySelectorAll('.card').forEach(c=>{ c.style.transform='translateY(8px)'; c.style.opacity='.001'; obs.observe(c); });
     </script>
   </body>
 </html>
