@@ -68,9 +68,32 @@
       }
       .card.project .overlay-text h3 { margin: 0 0 6px; font-size: clamp(18px, 2.2vw, 24px); }
       .card.project .overlay-text p { margin: 0; font-size: clamp(12px, 1.6vw, 14px); opacity: .95; }
-      .card.project .bottom {
-        padding: 12px 16px 16px 16px;
-        display: flex; gap: 8px; flex-wrap: wrap;
+      .card.project .bottom { padding: 12px 16px 0 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+      /* NEW: gallery “cell” below each project */
+      .gallery {
+        margin-top: 10px;
+        padding: 10px 6px 6px;
+        border-top: 1px dashed var(--border);
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 140px;
+        gap: 10px;
+        overflow-x: auto;
+        scrollbar-width: thin;
+      }
+      .gallery:empty { display: none; } /* hides cell if no images inside */
+      .gallery img {
+        width: 100%;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--chip);
+      }
+      @media (min-width: 820px) {
+        .gallery { grid-auto-columns: 160px; }
+        .gallery img { height: 100px; }
       }
 
       footer { color: var(--muted); margin-top: 28px; text-align: center; }
@@ -110,9 +133,15 @@
           <div class="links">
             <a class="btn" href="https://github.com/USERNAME/gpt2-from-scratch" target="_blank" rel="noreferrer">Code</a>
           </div>
+          <!-- NEW gallery row (add images inside as needed) -->
+          <div class="gallery">
+            <!-- Example (uncomment if you add the file):
+            <img src="assets/gpt2.png" alt="GPT-2 training dashboard screenshot">
+            -->
+          </div>
         </article>
 
-        <!-- Foodify with overlay text on image and skills at bottom -->
+        <!-- Foodify with overlay + tags at bottom -->
         <article class="card project" data-tags="fullstack react node mongo" data-search="mern foodify auth rest responsive">
           <figure class="media">
             <img class="thumb" src="assets/foodify.png" alt="Screenshot of Foodify app showing a list of food posts with images and titles." />
@@ -124,6 +153,14 @@
           <div class="bottom tags">
             <span class="tag">Full-stack</span><span class="tag">React</span>
           </div>
+          <!-- NEW gallery row -->
+          <div class="gallery">
+            <img src="assets/foodify.png" alt="Foodify list view screenshot">
+            <!-- Add more screenshots like:
+            <img src="assets/foodify-detail.png" alt="Foodify detail page">
+            <img src="assets/foodify-mobile.png" alt="Foodify mobile layout">
+            -->
+          </div>
         </article>
 
         <!-- Course-it -->
@@ -133,6 +170,13 @@
           <div class="tags"><span class="tag">Android</span><span class="tag">Kotlin</span></div>
           <div class="links">
             <a class="btn" href="https://kanvithi23.wixsite.com/2340-course-schedule" target="_blank" rel="noreferrer">Website</a>
+          </div>
+          <!-- NEW gallery row -->
+          <div class="gallery">
+            <!-- Example:
+            <img src="assets/courseit1.png" alt="Course-it main screen">
+            <img src="assets/courseit2.png" alt="Course-it scheduler view">
+            -->
           </div>
         </article>
       </section>
@@ -148,7 +192,7 @@
       (function () {
         const root = document.documentElement;
 
-        /* ---------- Theme ---------- */
+        /* Theme */
         function setTheme(mode) {
           if (mode === 'light') root.setAttribute('data-theme', 'light');
           else root.removeAttribute('data-theme');
@@ -167,7 +211,7 @@
         initTheme();
 
         ready(function () {
-          /* ---------- Nav & year ---------- */
+          /* Nav & year */
           const toggle = document.getElementById('themeToggle');
           if (toggle) toggle.addEventListener('click', () => {
             const isLight = root.getAttribute('data-theme') === 'light';
@@ -176,7 +220,7 @@
           const year = document.getElementById('y');
           if (year) year.textContent = new Date().getFullYear();
 
-          /* ---------- Reveal animation ---------- */
+          /* Reveal animation */
           let obs;
           try {
             obs = new IntersectionObserver((entries) => {
@@ -191,7 +235,7 @@
             document.querySelectorAll('#grid .card').forEach(c => obs.observe(c));
           } catch (_) {}
 
-          /* ---------- Search & filter ---------- */
+          /* Search & filter */
           const chips  = Array.from(document.querySelectorAll('.chip'));
           const search = document.getElementById('search');
           const empty  = document.getElementById('empty');
@@ -234,7 +278,7 @@
 
           search?.addEventListener('input', applyFilters);
 
-          /* ---------- Optional: auto-append GitHub repos ---------- */
+          /* Optional: auto-append GitHub repos */
           async function loadRepos() {
             const username = 'USERNAME'; // <-- replace
             try {
@@ -254,8 +298,8 @@
                   <div class="tags"><span class="tag">GitHub</span></div>
                   <div class="links">
                     <a class="btn" href="${r.html_url}" target="_blank" rel="noreferrer">Code</a>
-                    ${r.homepage ? `<a class="btn" href="${r.homepage}" target="_blank" rel="noreferrer">Demo</a>` : ''}
                   </div>
+                  <div class="gallery"></div>
                 `;
                 grid.appendChild(card);
                 try { obs && obs.observe(card); } catch (_) {
