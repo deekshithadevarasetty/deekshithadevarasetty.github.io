@@ -3,78 +3,78 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Deekshitha Devarasetty — Portfolio</title>
-    <meta name="description" content="Portfolio of Deekshitha Devarasetty — Software Engineering & ML" />
+    <title>Projects — Deekshitha Devarasetty</title>
+    <meta name="description" content="Projects by Deekshitha Devarasetty — Software Engineering & ML" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
       :root {
-        --bg: #0b1220;
-        --card: #111a2b;
-        --text: #e6ecff;
-        --muted: #98a2b3;
-        --accent: #5b8cff;
-        --chip: #1c2842;
-        --border: #22314f;
+        --bg: #0b1220; --card: #111a2b; --text: #e6ecff; --muted: #98a2b3;
+        --accent: #5b8cff; --chip: #1c2842; --border: #22314f;
       }
       :root[data-theme="light"] {
-        --bg: #f7f9ff;
-        --card: #ffffff;
-        --text: #0f1730;
-        --muted: #475467;
-        --accent: #3b6cff;
-        --chip: #eef2ff;
-        --border: #d6dcf0;
+        --bg: #f7f9ff; --card: #ffffff; --text: #0f1730; --muted: #475467;
+        --accent: #3b6cff; --chip: #eef2ff; --border: #d6dcf0;
       }
 
       * { box-sizing: border-box; }
-      body {
-        margin: 0; padding: 40px 20px;
-        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
-        color: var(--text); background: var(--bg);
-      }
-      .container { max-width: 980px; margin: 0 auto; }
+      body { margin: 0; padding: 40px 20px; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; color: var(--text); background: var(--bg); }
+      .container { max-width: 1100px; margin: 0 auto; }
 
       /* Nav */
       .topnav { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px; }
       .brand { font-weight:700; letter-spacing:.2px; }
       .navlinks { display:flex; gap:10px; flex-wrap:wrap; }
-      .navbtn { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:10px; border:1px solid var(--border); text-decoration:none; color:var(--text); background:transparent; }
+      .navbtn { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:10px; border:1px solid var(--border); text-decoration:none; color:var(--text) }
       .navbtn:hover { border-color: var(--accent); }
       .toggle { cursor:pointer; border:1px solid var(--border); padding:8px 12px; border-radius:999px; background: var(--chip); color: var(--text); }
 
-      /* Cards & sections */
-      header { display:grid; grid-template-columns:1fr; gap:20px; }
-      .card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 20px; transform: translateY(8px); opacity:.001; }
-      .hero { background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0)); }
-      h1 { margin:0 0 6px; font-size:34px; letter-spacing:.2px; }
-      .subtitle { color: var(--muted); margin:0 0 14px; }
-
-      /* Buttons */
-      .links { display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
-      .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px; border:1px solid var(--border); text-decoration:none; color:var(--text); background: var(--chip); }
-      .btn:hover { border-color: var(--accent); }
-      .btn:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
-      .btn--primary { background: var(--accent); color:#ffffff; border-color: var(--accent); }
-
-      .grid { display:grid; grid-template-columns:1fr; gap:18px; margin-top:28px; }
-      h2 { margin:0 0 8px; font-size:22px; }
-      h3 { margin:0 0 6px; font-size:18px; }
+      /* Hero */
+      .hero { background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0)); padding: 24px; border: 1px solid var(--border); border-radius: 18px; margin-bottom: 20px; }
+      h1 { margin:0 0 6px; font-size: 30px; }
       .muted { color: var(--muted); }
-      .row { display:grid; grid-template-columns:1fr; gap:12px; }
-      .list { display:grid; gap:8px; margin:10px 0 0; padding-left:18px; }
-      .list li { line-height:1.45; }
-      .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
-      .chip { font-size:13px; background:var(--chip); color:var(--text); padding:6px 10px; border-radius:999px; border:1px solid var(--border); }
+
+      .toolbar { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+      .chip { font-size: 13px; background: var(--chip); color: var(--text); padding: 6px 10px; border-radius: 999px; border: 1px solid var(--border); cursor:pointer; }
+      .chip.active { outline: 2px solid var(--accent); }
+      .search { flex:1; min-width:220px; padding:10px 12px; border-radius:12px; border:1px solid var(--border); background: var(--card); color: var(--text); }
+
+      /* Grid & cards */
+      .grid { display:grid; grid-template-columns: 1fr; gap:16px; }
+      @media (min-width: 820px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+      .card { background: var(--card); border:1px solid var(--border); border-radius:18px; padding:16px; display:flex; flex-direction:column; gap:8px; opacity:.001; transform:translateY(8px); }
+      .card h3 { margin:0; font-size:18px; }
+      .tags { display:flex; gap:8px; flex-wrap:wrap; }
+      .tag { font-size:12px; background: var(--chip); border:1px solid var(--border); border-radius:999px; padding:4px 8px; }
+
+      /* Buttons (used on some cards / loaded repos) */
+      .links { display:flex; gap:10px; margin-top:auto; }
+      .btn { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border:1px solid var(--border); border-radius:10px; text-decoration:none; color:var(--text); background: var(--chip); }
+      .btn:hover { border-color: var(--accent); }
+      .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+      /* Foodify overlay layout */
+      .card.project { padding: 0; overflow: hidden; }
+      .card.project .media { position: relative; margin: 0; }
+      .card.project .thumb { width: 100%; display: block; object-fit: cover; height: auto; }
+      .card.project .overlay-text {
+        position: absolute; inset: 0 auto auto 0;
+        width: 100%; padding: 16px 16px 48px 16px;
+        color: #fff;
+        background: linear-gradient(180deg, rgba(0,0,0,.65) 0%, rgba(0,0,0,.35) 40%, rgba(0,0,0,0) 75%);
+        text-shadow: 0 1px 2px rgba(0,0,0,.4);
+      }
+      .card.project .overlay-text h3 { margin: 0 0 6px; font-size: clamp(18px, 2.2vw, 24px); }
+      .card.project .overlay-text p { margin: 0; font-size: clamp(12px, 1.6vw, 14px); opacity: .95; }
+      .card.project .bottom {
+        padding: 12px 16px 16px 16px;
+        display: flex; gap: 8px; flex-wrap: wrap;
+      }
 
       footer { color: var(--muted); margin-top: 28px; text-align: center; }
-
-      @media (min-width: 860px) {
-        header { grid-template-columns: 1.2fr .8fr; align-items: start; }
-        .grid { grid-template-columns: 1fr 1fr; }
-        .row { grid-template-columns: 1fr 1fr; }
-      }
+      .empty { color: var(--muted); text-align:center; padding:20px; display:none; }
     </style>
   </head>
   <body>
@@ -82,117 +82,65 @@
       <nav class="topnav" aria-label="Primary">
         <div class="brand">DD</div>
         <div class="navlinks">
-          <a class="navbtn" href="/" aria-current="page">Home</a>
-          <a class="navbtn" href="projects.html">Projects</a>
+          <a class="navbtn" href="/">Home</a>
+          <a class="navbtn" href="projects.html" aria-current="page">Projects</a>
           <button id="themeToggle" class="toggle" type="button" aria-label="Toggle theme">Toggle theme</button>
         </div>
       </nav>
 
-      <header>
-        <section class="hero card">
-          <h1>Deekshitha Devarasetty</h1>
-          <p class="subtitle">B.S. Computer Science @ Georgia Tech · Software Engineering & ML</p>
+      <section class="hero card">
+        <h1>Projects</h1>
+        <p class="muted">Filter by tag or search title/description. Click through for code, demos, or write-ups.</p>
+        <div class="toolbar">
+          <input id="search" class="search" type="search" placeholder="Search projects..." />
+          <button class="chip active" data-tag="all">All</button>
+          <button class="chip" data-tag="ml">ML</button>
+          <button class="chip" data-tag="fullstack">Full-stack</button>
+          <button class="chip" data-tag="android">Android</button>
+          <button class="chip" data-tag="systems">Systems</button>
+        </div>
+      </section>
+
+      <section id="grid" class="grid">
+        <!-- GPT-2 -->
+        <article class="card" data-tags="ml python" data-search="gpt2 llm pytorch cuda fineweb hellaswag">
+          <h3>GPT-2 LLM (124M) — from scratch</h3>
+          <p class="muted">PyTorch • CUDA • Evaluation on HellaSwag with improved accuracy vs. baseline.</p>
+          <div class="tags"><span class="tag">ML</span><span class="tag">Python</span></div>
           <div class="links">
-            <a class="btn btn--primary" href="mailto:ddevarasetty3@gatech.edu">Email</a>
-            <a class="btn" href="https://linkedin.com/in/deekshithadevarasetty" target="_blank" rel="noreferrer">LinkedIn</a>
-            <a class="btn" href="https://github.com/deekshithadevarasetty" target="_blank" rel="noreferrer">GitHub</a>
-            <a class="btn" href="assets/Deekshitha-Devarasetty-Resume.pdf" target="_blank" rel="noreferrer">Resume (PDF)</a>
-          </div>
-          <div class="chips">
-            <span class="chip">Java</span><span class="chip">Python</span><span class="chip">C</span><span class="chip">JavaScript</span>
-            <span class="chip">React</span><span class="chip">Spring Boot</span><span class="chip">PyTorch</span><span class="chip">SQL</span>
-          </div>
-        </section>
-
-        <section class="card">
-          <h2>About</h2>
-          <p>I'm a software engineer with interests spanning full-stack development and machine learning. I enjoy working with AI and systems and architecture to optimize processes.</p>
-          <p class="muted">Currently based in Atlanta, GA.</p>
-        </section>
-      </header>
-
-      <section class="grid">
-        <article class="card">
-          <h2>Experience</h2>
-          <div>
-            <h3>Mastercard — Fullstack Software Engineer Intern</h3>
-            <p class="muted">St. Louis, MO · Jun 2025 – Aug 2025</p>
-            <ul class="list">
-              <li>Built a pipeline that converts natural-language prompts into functional Spring Boot REST APIs, deployed as a reusable internal tool.</li>
-              <li>Reduced development time by ~80% and delivered a live demo to senior leadership, including deployment to PCF and database integration.</li>
-              <li>Prototyped a Workday-integrated corporate card request workflow with automated approvals and API data exchange.</li>
-            </ul>
-          </div>
-          <div style="margin-top:14px;">
-            <h3>Automated Algorithm Design VIP Lab — ML Researcher</h3>
-            <p class="muted">Atlanta, GA · Jan 2024 – May 2025</p>
-            <ul class="list">
-              <li>Developed a genetic programming framework to evolve human-competitive algorithms using Python, SQL, DEAP.</li>
-              <li>Built LLM-driven components to generate and evaluate candidate solutions across multi-objective criteria.</li>
-            </ul>
-          </div>
-          <div style="margin-top:14px;">
-            <h3>Bromberg Lab — Data Analyst</h3>
-            <p class="muted">Atlanta, GA · May 2024 – Jun 2024</p>
-            <ul class="list">
-              <li>Preprocessed and analyzed 12k+ protein datasets; explored relationships between enzyme similarity and embedding distances.</li>
-              <li>Produced ML-backed visualizations and reports to support publications.</li>
-            </ul>
+            <a class="btn" href="https://github.com/USERNAME/gpt2-from-scratch" target="_blank" rel="noreferrer">Code</a>
           </div>
         </article>
 
-        <article class="card">
-          <h2>Highlights</h2>
-          <div>
-            <h3>GPT-2 LLM (from scratch)</h3>
-            <p class="muted">Python · PyTorch · CUDA · HellaSwag evaluation</p>
-            <ul class="list">
-              <li>Rebuilt GPT-2 (124M) in PyTorch; trained on FineWeb samples and improved HellaSwag accuracy over baseline.</li>
-            </ul>
+        <!-- Foodify with overlay text on image and skills at bottom -->
+        <article class="card project" data-tags="fullstack react node mongo" data-search="mern foodify auth rest responsive">
+          <figure class="media">
+            <img class="thumb" src="assets/foodify.png" alt="Screenshot of Foodify app showing a list of food posts with images and titles." />
+            <figcaption class="overlay-text">
+              <h3>Foodify — MERN social food tracker</h3>
+              <p>Auth, REST APIs, responsive UI, and social feed.</p>
+            </figcaption>
+          </figure>
+          <div class="bottom tags">
+            <span class="tag">Full-stack</span><span class="tag">React</span>
           </div>
-          <div style="margin-top:14px;">
-            <h3>Foodify</h3>
-            <p class="muted">MongoDB · Express · React · Node</p>
-            <ul class="list">
-              <li>Social food-tracking app with auth, REST APIs, and responsive UI.</li>
-            </ul>
-          </div>
-          <div style="margin-top:14px;">
-            <h3>Course-it</h3>
-            <p class="muted">Android · Java · Kotlin</p>
-            <ul class="list">
-              <li>Academic planning app with flexible schedules; Gradle + Git for robust development.</li>
-            </ul>
-          </div>
-          <div class="links" style="margin-top:10px;">
-            <a class="btn" href="projects.html">View all projects →</a>
+        </article>
+
+        <!-- Course-it -->
+        <article class="card" data-tags="android kotlin java" data-search="course it android scheduler planner gradle">
+          <h3>Course-it — Android academic planner</h3>
+          <p class="muted">Flexible schedules with Kotlin/Java; Gradle + Git.</p>
+          <div class="tags"><span class="tag">Android</span><span class="tag">Kotlin</span></div>
+          <div class="links">
+            <a class="btn" href="https://kanvithi23.wixsite.com/2340-course-schedule" target="_blank" rel="noreferrer">Website</a>
           </div>
         </article>
       </section>
 
-      <section class="row" style="margin-top:18px;">
-        <article class="card">
-          <h2>Education</h2>
-          <h3>Georgia Institute of Technology</h3>
-          <p class="muted">B.S. Computer Science — Expected May 2026</p>
-          <p class="muted">Coursework: Data Structures & Algorithms, Databases, Systems & Networks, AI, Linear Algebra, Operating Systems, Networking, Internet Systems & Services, Computer Organization</p>
-          <p class="muted">Extracurriculars: Society of Women Engineers, GirlsWhoCode, Amazon’s Women of the World, GT Pickleball (Team Captain)</p>
-        </article>
-        <article class="card">
-          <h2>Skills</h2>
-          <div class="chips">
-            <span class="chip">Java</span><span class="chip">Python</span><span class="chip">C</span><span class="chip">JavaScript</span>
-            <span class="chip">Swift</span><span class="chip">SQL</span><span class="chip">Kotlin</span><span class="chip">HTML/CSS</span>
-            <span class="chip">React</span><span class="chip">Node.js</span><span class="chip">Express</span><span class="chip">Spring Boot</span>
-            <span class="chip">Django</span><span class="chip">PyTorch</span><span class="chip">CUDA</span><span class="chip">Git</span>
-            <span class="chip">Docker</span><span class="chip">Gradle</span><span class="chip">MongoDB</span><span class="chip">PostgreSQL</span>
-            <span class="chip">Xcode</span>
-          </div>
-        </article>
-      </section>
+      <p id="empty" class="empty">No projects match that filter/search.</p>
 
       <footer>
-        <p>© <span id="y"></span> Deekshitha Devarasetty · Built with GitHub Pages</p>
+        <p>© <span id="y"></span> Deekshitha Devarasetty · Projects</p>
       </footer>
     </div>
 
@@ -200,6 +148,7 @@
       (function () {
         const root = document.documentElement;
 
+        /* ---------- Theme ---------- */
         function setTheme(mode) {
           if (mode === 'light') root.setAttribute('data-theme', 'light');
           else root.removeAttribute('data-theme');
@@ -216,18 +165,21 @@
         function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
 
         initTheme();
+
         ready(function () {
+          /* ---------- Nav & year ---------- */
           const toggle = document.getElementById('themeToggle');
           if (toggle) toggle.addEventListener('click', () => {
             const isLight = root.getAttribute('data-theme') === 'light';
             setTheme(isLight ? '' : 'light');
           });
-
           const year = document.getElementById('y');
           if (year) year.textContent = new Date().getFullYear();
 
+          /* ---------- Reveal animation ---------- */
+          let obs;
           try {
-            const obs = new IntersectionObserver((entries) => {
+            obs = new IntersectionObserver((entries) => {
               entries.forEach(e => {
                 if (e.isIntersecting) {
                   e.target.style.transition='transform .5s ease, opacity .5s ease';
@@ -236,8 +188,86 @@
                 }
               });
             }, { threshold: .1 });
-            document.querySelectorAll('.card').forEach(c => obs.observe(c));
+            document.querySelectorAll('#grid .card').forEach(c => obs.observe(c));
           } catch (_) {}
+
+          /* ---------- Search & filter ---------- */
+          const chips  = Array.from(document.querySelectorAll('.chip'));
+          const search = document.getElementById('search');
+          const empty  = document.getElementById('empty');
+          let activeTag = 'all';
+
+          const getCards = () => Array.from(document.querySelectorAll('#grid .card'));
+
+          function applyFilters() {
+            const q = (search?.value || '').trim().toLowerCase();
+            const cards = getCards();
+            let visible = 0;
+
+            cards.forEach(card => {
+              const tagsStr = (card.dataset.tags || '').trim();
+              const tagsArr = tagsStr ? tagsStr.split(/\s+/) : [];
+              const matchTag = activeTag === 'all' || tagsArr.includes(activeTag);
+
+              const titleEl = card.querySelector('h3');
+              const hay = (
+                (card.dataset.search || '') + ' ' +
+                (titleEl ? titleEl.textContent.toLowerCase() : '') + ' ' +
+                tagsArr.join(' ')
+              ).trim();
+
+              const matchSearch = !q || hay.includes(q);
+              const show = matchTag && matchSearch;
+              card.style.display = show ? '' : 'none';
+              if (show) visible++;
+            });
+
+            if (empty) empty.style.display = visible ? 'none' : 'block';
+          }
+
+          chips.forEach(chip => chip.addEventListener('click', () => {
+            chips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            activeTag = chip.dataset.tag;
+            applyFilters();
+          }));
+
+          search?.addEventListener('input', applyFilters);
+
+          /* ---------- Optional: auto-append GitHub repos ---------- */
+          async function loadRepos() {
+            const username = 'USERNAME'; // <-- replace
+            try {
+              const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
+              if (!res.ok) return;
+              const repos = await res.json();
+              const grid = document.getElementById('grid');
+              repos.slice(0, 9).forEach(r => {
+                if (r.fork) return;
+                const card = document.createElement('article');
+                card.className = 'card';
+                card.dataset.tags = 'fullstack';
+                card.dataset.search = (r.name + ' ' + (r.description || '')).toLowerCase();
+                card.innerHTML = `
+                  <h3>${r.name.replace(/[-_]/g,' ')}</h3>
+                  <p class="muted">${r.description || 'No description provided.'}</p>
+                  <div class="tags"><span class="tag">GitHub</span></div>
+                  <div class="links">
+                    <a class="btn" href="${r.html_url}" target="_blank" rel="noreferrer">Code</a>
+                    ${r.homepage ? `<a class="btn" href="${r.homepage}" target="_blank" rel="noreferrer">Demo</a>` : ''}
+                  </div>
+                `;
+                grid.appendChild(card);
+                try { obs && obs.observe(card); } catch (_) {
+                  card.style.opacity='1'; card.style.transform='translateY(0)';
+                }
+              });
+              applyFilters();
+            } catch (_) {}
+          }
+
+          applyFilters();
+          loadRepos();
         });
       })();
     </script>
