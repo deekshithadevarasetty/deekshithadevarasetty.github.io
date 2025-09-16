@@ -115,113 +115,135 @@
       </footer>
     </div>
 
-    <script>
-      (function () {
-        const root = document.documentElement;
+  <script>
+  (function () {
+    const root = document.documentElement;
 
-        function setTheme(mode) {
-          if (mode === 'light') root.setAttribute('data-theme', 'light');
-          else root.removeAttribute('data-theme');
-          localStorage.setItem('theme', mode);
-        }
-        function initTheme() {
-          try {
-            const saved = localStorage.getItem('theme');
-            const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-            const initial = (saved === 'light') || (!saved && prefersLight) ? 'light' : '';
-            if (initial === 'light') root.setAttribute('data-theme', 'light');
-          } catch (_) {}
-        }
-        function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+    /* ---------- Theme ---------- */
+    function setTheme(mode) {
+      if (mode === 'light') root.setAttribute('data-theme', 'light');
+      else root.removeAttribute('data-theme');
+      localStorage.setItem('theme', mode);
+    }
+    function initTheme() {
+      try {
+        const saved = localStorage.getItem('theme');
+        const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        const initial = (saved === 'light') || (!saved && prefersLight) ? 'light' : '';
+        if (initial === 'light') root.setAttribute('data-theme', 'light');
+      } catch (_) {}
+    }
+    function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
 
-        initTheme();
-        ready(function () {
-          const toggle = document.getElementById('themeToggle');
-          if (toggle) toggle.addEventListener('click', () => {
-            const isLight = root.getAttribute('data-theme') === 'light';
-            setTheme(isLight ? '' : 'light');
+    initTheme();
+
+    ready(function () {
+      /* ---------- Nav & year ---------- */
+      const toggle = document.getElementById('themeToggle');
+      if (toggle) toggle.addEventListener('click', () => {
+        const isLight = root.getAttribute('data-theme') === 'light';
+        setTheme(isLight ? '' : 'light');
+      });
+      const year = document.getElementById('y');
+      if (year) year.textContent = new Date().getFullYear();
+
+      /* ---------- Reveal animation ---------- */
+      let obs;
+      try {
+        obs = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.style.transition='transform .5s ease, opacity .5s ease';
+              e.target.style.transform='translateY(0)';
+              e.target.style.opacity='1';
+            }
           });
+        }, { threshold: .1 });
+        // Only animate project cards (not the hero)
+        document.querySelectorAll('#grid .card').forEach(c => obs.observe(c));
+      } catch (_) {}
 
-          const year = document.getElementById('y');
-          if (year) year.textContent = new Date().getFullYear();
+      /* ---------- Search & filter ---------- */
+      const chips  = Array.from(document.querySelectorAll('.chip'));
+      const search = document.getElementById('search');
+      const empty  = document.getElementById('empty');
+      let activeTag = 'all';
 
-          // Reveal animation
-          try {
-            const obs = new IntersectionObserver((entries) => {
-              entries.forEach(e => {
-                if (e.isIntersecting) {
-                  e.target.style.transition='transform .5s ease, opacity .5s ease';
-                  e.target.style.transform='translateY(0)';
-                  e.target.style.opacity='1';
-                }
-              });
-            }, { threshold: .1 });
-            document.querySelectorAll('.card').forEach(c => obs.observe(c));
-          } catch (_) {}
+      // Always read the current set of project cards (works with dynamically-added repos)
+      const getCards = () => Array.from(document.querySelectorAll('#grid .card'));
 
-          // Filter + search
-          const chips = Array.from(document.querySelectorAll('.chip'));
-          const cards = Array.from(document.querySelectorAll('.card'));
-          const search = document.getElementById('search');
-          const empty = document.getElementById('empty');
-          let activeTag = 'all';
+      function applyFilters() {
+        const q = (search?.value || '').trim().toLowerCase();
+        const cards = getCards();
+        let visible = 0;
 
-          function applyFilters() {
-            const q = (search.value || '').trim().toLowerCase();
-            let visible = 0;
-            cards.forEach(card => {
-              const tags = card.dataset.tags || '';
-              const matchTag = activeTag === 'all' || tags.includes(activeTag);
-              const hay = (card.dataset.search || '') + ' ' + card.querySelector('h3').textContent.toLowerCase();
-              const matchSearch = !q || hay.includes(q);
-              const show = matchTag && matchSearch;
-              card.style.display = show ? '' : 'none';
-              if (show) visible++;
-            });
-            empty.style.display = visible ? 'none' : 'block';
-          }
+        cards.forEach(card => {
+          const tagsStr = (card.dataset.tags || '').trim();
+          const tagsArr = tagsStr ? tagsStr.split(/\s+/) : [];
+          const matchTag = activeTag === 'all' || tagsArr.includes(activeTag);
 
-          chips.forEach(chip => chip.addEventListener('click', () => {
-            chips.forEach(c => c.classList.remove('active'));
-            chip.classList.add('active');
-            activeTag = chip.dataset.tag;
-            applyFilters();
-          }));
-          search.addEventListener('input', applyFilters);
+          const titleEl = card.querySelector('h3');
+          const hay = ((card.dataset.search || '') + ' ' + (titleEl ? titleEl.textContent.toLowerCase() : '')).trim();
+          const matchSearch = !q || hay.includes(q);
 
-          // Optional: auto-append public repos (replace USERNAME)
-          async function loadRepos() {
-            const username = 'USERNAME';
-            try {
-              const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
-              if (!res.ok) return;
-              const repos = await res.json();
-              const grid = document.getElementById('grid');
-              repos.slice(0, 9).forEach(r => {
-                if (r.fork) return;
-                const card = document.createElement('article');
-                card.className = 'card';
-                card.dataset.tags = 'fullstack';
-                card.dataset.search = (r.name + ' ' + (r.description || '')).toLowerCase();
-                card.innerHTML = `
-                  <h3>${r.name.replace(/[-_]/g,' ')}</h3>
-                  <p class="muted">${r.description || 'No description provided.'}</p>
-                  <div class="tags"><span class="tag">GitHub</span></div>
-                  <div class="links">
-                    <a class="btn" href="${r.html_url}" target="_blank" rel="noreferrer">Code</a>
-                    ${r.homepage ? `<a class="btn" href="${r.homepage}" target="_blank" rel="noreferrer">Demo</a>` : ''}
-                  </div>
-                `;
-                grid.appendChild(card);
-                try { obs.observe(card); } catch (_) {
-                  card.style.opacity='1'; card.style.transform='translateY(0)';
-                }
-              });
-            } catch (_) {}
-          }
-          loadRepos();
+          const show = matchTag && matchSearch;
+          card.style.display = show ? '' : 'none';
+          if (show) visible++;
         });
-      })();
-    </script>
+
+        if (empty) empty.style.display = visible ? 'none' : 'block';
+      }
+
+      chips.forEach(chip => chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeTag = chip.dataset.tag;
+        applyFilters();
+      }));
+
+      search?.addEventListener('input', applyFilters);
+
+      /* ---------- Optional: auto-append GitHub repos ---------- */
+      async function loadRepos() {
+        const username = 'USERNAME'; // <-- replace
+        try {
+          const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
+          if (!res.ok) return;
+          const repos = await res.json();
+          const grid = document.getElementById('grid');
+          repos.slice(0, 9).forEach(r => {
+            if (r.fork) return;
+            const card = document.createElement('article');
+            card.className = 'card';
+            // Give loaded repos a tag so filters can work (e.g., "fullstack")
+            card.dataset.tags = 'fullstack';
+            card.dataset.search = (r.name + ' ' + (r.description || '')).toLowerCase();
+            card.innerHTML = `
+              <h3>${r.name.replace(/[-_]/g,' ')}</h3>
+              <p class="muted">${r.description || 'No description provided.'}</p>
+              <div class="tags"><span class="tag">GitHub</span></div>
+              <div class="links">
+                <a class="btn" href="${r.html_url}" target="_blank" rel="noreferrer">Code</a>
+                ${r.homepage ? `<a class="btn" href="${r.homepage}" target="_blank" rel="noreferrer">Demo</a>` : ''}
+              </div>
+            `;
+            grid.appendChild(card);
+            // Animate if possible
+            try { obs && obs.observe(card); } catch (_) {
+              card.style.opacity='1'; card.style.transform='translateY(0)';
+            }
+          });
+          // Re-run filter so search & tag selection affect newly added repos
+          applyFilters();
+        } catch (_) {}
+      }
+
+      // Initial filter state
+      applyFilters();
+      // Load repos (optional)
+      loadRepos();
+    });
+  })();
+  </script>
   </body>
 </html>
