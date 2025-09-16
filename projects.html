@@ -22,6 +22,7 @@
       body { margin: 0; padding: 40px 20px; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; color: var(--text); background: var(--bg); }
       .container { max-width: 1100px; margin: 0 auto; }
 
+      /* Nav */
       .topnav { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px; }
       .brand { font-weight:700; letter-spacing:.2px; }
       .navlinks { display:flex; gap:10px; flex-wrap:wrap; }
@@ -29,6 +30,7 @@
       .navbtn:hover { border-color: var(--accent); }
       .toggle { cursor:pointer; border:1px solid var(--border); padding:8px 12px; border-radius:999px; background: var(--chip); color: var(--text); }
 
+      /* Hero */
       .hero { background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0)); padding: 24px; border: 1px solid var(--border); border-radius: 18px; margin-bottom: 20px; }
       h1 { margin:0 0 6px; font-size: 30px; }
       .muted { color: var(--muted); }
@@ -38,6 +40,7 @@
       .chip.active { outline: 2px solid var(--accent); }
       .search { flex:1; min-width:220px; padding:10px 12px; border-radius:12px; border:1px solid var(--border); background: var(--card); color: var(--text); }
 
+      /* Grid & cards */
       .grid { display:grid; grid-template-columns: 1fr; gap:16px; }
       @media (min-width: 820px) { .grid { grid-template-columns: repeat(3, 1fr); } }
 
@@ -45,10 +48,26 @@
       .card h3 { margin:0; font-size:18px; }
       .tags { display:flex; gap:8px; flex-wrap:wrap; }
       .tag { font-size:12px; background: var(--chip); border:1px solid var(--border); border-radius:999px; padding:4px 8px; }
+
+      /* Buttons (used on some cards / loaded repos) */
       .links { display:flex; gap:10px; margin-top:auto; }
       .btn { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border:1px solid var(--border); border-radius:10px; text-decoration:none; color:var(--text); background: var(--chip); }
       .btn:hover { border-color: var(--accent); }
       .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+      /* Foodify screenshot layout */
+      .card.project { display: grid; grid-template-columns: 1fr; gap: 12px; }
+      .card.project .thumb {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+      }
+      @media (min-width: 820px) {
+        .card.project { grid-template-columns: 320px 1fr; align-items: center; }
+        .card.project .thumb { aspect-ratio: auto; height: 180px; }
+      }
 
       footer { color: var(--muted); margin-top: 28px; text-align: center; }
       .empty { color: var(--muted); text-align:center; padding:20px; display:none; }
@@ -79,7 +98,7 @@
       </section>
 
       <section id="grid" class="grid">
-        <!-- Your editable manual cards -->
+        <!-- GPT-2 -->
         <article class="card" data-tags="ml python" data-search="gpt2 llm pytorch cuda fineweb hellaswag">
           <h3>GPT-2 LLM (124M) — from scratch</h3>
           <p class="muted">PyTorch • CUDA • Evaluation on HellaSwag with improved accuracy vs. baseline.</p>
@@ -89,15 +108,17 @@
           </div>
         </article>
 
-        <article class="card" data-tags="fullstack react node mongo" data-search="mern foodify auth rest responsive">
-          <h3>Foodify — MERN social food tracker</h3>
-          <p class="muted">Auth, REST APIs, responsive UI, and social feed.</p>
-          <div class="tags"><span class="tag">Full-stack</span><span class="tag">React</span></div>
-          <div class="links">
-            <a class="btn" href="https://github.com/USERNAME/foodify" target="_blank" rel="noreferrer">Code</a>
+        <!-- Foodify with screenshot (no Code button) -->
+        <article class="card project" data-tags="fullstack react node mongo" data-search="mern foodify auth rest responsive">
+          <img class="thumb" src="assets/foodify.png" alt="Screenshot of Foodify app showing a list of food posts with images and titles." />
+          <div>
+            <h3>Foodify — MERN social food tracker</h3>
+            <p class="muted">Auth, REST APIs, responsive UI, and social feed.</p>
+            <div class="tags"><span class="tag">Full-stack</span><span class="tag">React</span></div>
           </div>
         </article>
 
+        <!-- Course-it -->
         <article class="card" data-tags="android kotlin java" data-search="course it android scheduler planner gradle">
           <h3>Course-it — Android academic planner</h3>
           <p class="muted">Flexible schedules with Kotlin/Java; Gradle + Git.</p>
@@ -115,135 +136,137 @@
       </footer>
     </div>
 
-  <script>
-  (function () {
-    const root = document.documentElement;
+    <script>
+      (function () {
+        const root = document.documentElement;
 
-    /* ---------- Theme ---------- */
-    function setTheme(mode) {
-      if (mode === 'light') root.setAttribute('data-theme', 'light');
-      else root.removeAttribute('data-theme');
-      localStorage.setItem('theme', mode);
-    }
-    function initTheme() {
-      try {
-        const saved = localStorage.getItem('theme');
-        const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-        const initial = (saved === 'light') || (!saved && prefersLight) ? 'light' : '';
-        if (initial === 'light') root.setAttribute('data-theme', 'light');
-      } catch (_) {}
-    }
-    function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+        /* ---------- Theme ---------- */
+        function setTheme(mode) {
+          if (mode === 'light') root.setAttribute('data-theme', 'light');
+          else root.removeAttribute('data-theme');
+          localStorage.setItem('theme', mode);
+        }
+        function initTheme() {
+          try {
+            const saved = localStorage.getItem('theme');
+            const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+            const initial = (saved === 'light') || (!saved && prefersLight) ? 'light' : '';
+            if (initial === 'light') root.setAttribute('data-theme', 'light');
+          } catch (_) {}
+        }
+        function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
 
-    initTheme();
+        initTheme();
 
-    ready(function () {
-      /* ---------- Nav & year ---------- */
-      const toggle = document.getElementById('themeToggle');
-      if (toggle) toggle.addEventListener('click', () => {
-        const isLight = root.getAttribute('data-theme') === 'light';
-        setTheme(isLight ? '' : 'light');
-      });
-      const year = document.getElementById('y');
-      if (year) year.textContent = new Date().getFullYear();
-
-      /* ---------- Reveal animation ---------- */
-      let obs;
-      try {
-        obs = new IntersectionObserver((entries) => {
-          entries.forEach(e => {
-            if (e.isIntersecting) {
-              e.target.style.transition='transform .5s ease, opacity .5s ease';
-              e.target.style.transform='translateY(0)';
-              e.target.style.opacity='1';
-            }
+        ready(function () {
+          /* ---------- Nav & year ---------- */
+          const toggle = document.getElementById('themeToggle');
+          if (toggle) toggle.addEventListener('click', () => {
+            const isLight = root.getAttribute('data-theme') === 'light';
+            setTheme(isLight ? '' : 'light');
           });
-        }, { threshold: .1 });
-        // Only animate project cards (not the hero)
-        document.querySelectorAll('#grid .card').forEach(c => obs.observe(c));
-      } catch (_) {}
+          const year = document.getElementById('y');
+          if (year) year.textContent = new Date().getFullYear();
 
-      /* ---------- Search & filter ---------- */
-      const chips  = Array.from(document.querySelectorAll('.chip'));
-      const search = document.getElementById('search');
-      const empty  = document.getElementById('empty');
-      let activeTag = 'all';
+          /* ---------- Reveal animation ---------- */
+          let obs;
+          try {
+            obs = new IntersectionObserver((entries) => {
+              entries.forEach(e => {
+                if (e.isIntersecting) {
+                  e.target.style.transition='transform .5s ease, opacity .5s ease';
+                  e.target.style.transform='translateY(0)';
+                  e.target.style.opacity='1';
+                }
+              });
+            }, { threshold: .1 });
+            // Only animate project cards (not the hero)
+            document.querySelectorAll('#grid .card').forEach(c => obs.observe(c));
+          } catch (_) {}
 
-      // Always read the current set of project cards (works with dynamically-added repos)
-      const getCards = () => Array.from(document.querySelectorAll('#grid .card'));
+          /* ---------- Search & filter ---------- */
+          const chips  = Array.from(document.querySelectorAll('.chip'));
+          const search = document.getElementById('search');
+          const empty  = document.getElementById('empty');
+          let activeTag = 'all';
 
-      function applyFilters() {
-        const q = (search?.value || '').trim().toLowerCase();
-        const cards = getCards();
-        let visible = 0;
+          // Always read the current set of project cards (works with dynamically-added repos)
+          const getCards = () => Array.from(document.querySelectorAll('#grid .card'));
 
-        cards.forEach(card => {
-          const tagsStr = (card.dataset.tags || '').trim();
-          const tagsArr = tagsStr ? tagsStr.split(/\s+/) : [];
-          const matchTag = activeTag === 'all' || tagsArr.includes(activeTag);
+          function applyFilters() {
+            const q = (search?.value || '').trim().toLowerCase();
+            const cards = getCards();
+            let visible = 0;
 
-          const titleEl = card.querySelector('h3');
-          const hay = ((card.dataset.search || '') + ' ' + (titleEl ? titleEl.textContent.toLowerCase() : '')).trim();
-          const matchSearch = !q || hay.includes(q);
+            cards.forEach(card => {
+              const tagsStr = (card.dataset.tags || '').trim();
+              const tagsArr = tagsStr ? tagsStr.split(/\s+/) : [];
+              const matchTag = activeTag === 'all' || tagsArr.includes(activeTag);
 
-          const show = matchTag && matchSearch;
-          card.style.display = show ? '' : 'none';
-          if (show) visible++;
-        });
+              const titleEl = card.querySelector('h3');
+              const hay = (
+                (card.dataset.search || '') + ' ' +
+                (titleEl ? titleEl.textContent.toLowerCase() : '') + ' ' +
+                tagsArr.join(' ')
+              ).trim();
 
-        if (empty) empty.style.display = visible ? 'none' : 'block';
-      }
+              const matchSearch = !q || hay.includes(q);
+              const show = matchTag && matchSearch;
+              card.style.display = show ? '' : 'none';
+              if (show) visible++;
+            });
 
-      chips.forEach(chip => chip.addEventListener('click', () => {
-        chips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        activeTag = chip.dataset.tag;
-        applyFilters();
-      }));
+            if (empty) empty.style.display = visible ? 'none' : 'block';
+          }
 
-      search?.addEventListener('input', applyFilters);
+          chips.forEach(chip => chip.addEventListener('click', () => {
+            chips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            activeTag = chip.dataset.tag;
+            applyFilters();
+          }));
 
-      /* ---------- Optional: auto-append GitHub repos ---------- */
-      async function loadRepos() {
-        const username = 'USERNAME'; // <-- replace
-        try {
-          const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
-          if (!res.ok) return;
-          const repos = await res.json();
-          const grid = document.getElementById('grid');
-          repos.slice(0, 9).forEach(r => {
-            if (r.fork) return;
-            const card = document.createElement('article');
-            card.className = 'card';
-            // Give loaded repos a tag so filters can work (e.g., "fullstack")
-            card.dataset.tags = 'fullstack';
-            card.dataset.search = (r.name + ' ' + (r.description || '')).toLowerCase();
-            card.innerHTML = `
-              <h3>${r.name.replace(/[-_]/g,' ')}</h3>
-              <p class="muted">${r.description || 'No description provided.'}</p>
-              <div class="tags"><span class="tag">GitHub</span></div>
-              <div class="links">
-                <a class="btn" href="${r.html_url}" target="_blank" rel="noreferrer">Code</a>
-                ${r.homepage ? `<a class="btn" href="${r.homepage}" target="_blank" rel="noreferrer">Demo</a>` : ''}
-              </div>
-            `;
-            grid.appendChild(card);
-            // Animate if possible
-            try { obs && obs.observe(card); } catch (_) {
-              card.style.opacity='1'; card.style.transform='translateY(0)';
-            }
-          });
-          // Re-run filter so search & tag selection affect newly added repos
+          search?.addEventListener('input', applyFilters);
+
+          /* ---------- Optional: auto-append GitHub repos ---------- */
+          async function loadRepos() {
+            const username = 'USERNAME'; // <-- replace
+            try {
+              const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
+              if (!res.ok) return;
+              const repos = await res.json();
+              const grid = document.getElementById('grid');
+              repos.slice(0, 9).forEach(r => {
+                if (r.fork) return;
+                const card = document.createElement('article');
+                card.className = 'card';
+                // Give loaded repos a tag so filters can work (e.g., "fullstack")
+                card.dataset.tags = 'fullstack';
+                card.dataset.search = (r.name + ' ' + (r.description || '')).toLowerCase();
+                card.innerHTML = `
+                  <h3>${r.name.replace(/[-_]/g,' ')}</h3>
+                  <p class="muted">${r.description || 'No description provided.'}</p>
+                  <div class="tags"><span class="tag">GitHub</span></div>
+                  <div class="links">
+                    <a class="btn" href="${r.html_url}" target="_blank" rel="noreferrer">Code</a>
+                    ${r.homepage ? `<a class="btn" href="${r.homepage}" target="_blank" rel="noreferrer">Demo</a>` : ''}
+                  </div>
+                `;
+                grid.appendChild(card);
+                try { obs && obs.observe(card); } catch (_) {
+                  card.style.opacity='1'; card.style.transform='translateY(0)';
+                }
+              });
+              // Re-run filter so search & tag selection affect newly added repos
+              applyFilters();
+            } catch (_) {}
+          }
+
+          // Initial filter state + optionally load repos
           applyFilters();
-        } catch (_) {}
-      }
-
-      // Initial filter state
-      applyFilters();
-      // Load repos (optional)
-      loadRepos();
-    });
-  })();
-  </script>
+          loadRepos();
+        });
+      })();
+    </script>
   </body>
 </html>
