@@ -12,7 +12,6 @@
       :root {
         --bg: #0b1220; --card: #111a2b; --text: #e6ecff; --muted: #98a2b3;
         --accent: #5b8cff; --chip: #1c2842; --border: #22314f;
-        /* new: consistent image + details sizes */
         --thumb-h: 200px;
       }
       :root[data-theme="light"] {
@@ -58,23 +57,17 @@
       .tags { display:flex; gap:8px; flex-wrap:wrap; }
       .tag { font-size:12px; background: var(--chip); border:1px solid var(--border); border-radius:999px; padding:4px 8px; }
 
-      /* Top image: show entire image (no crop) inside a consistent box height */
+      /* Top image (no crop) */
       .thumb-top {
         width: 100%;
-        height: var(--thumb-h);     /* fixed, responsive height */
-        object-fit: contain;        /* <-- show full image */
+        height: var(--thumb-h);
+        object-fit: contain;
         object-position: center;
         display: block;
-        background: var(--chip);    /* letterbox color behind transparent areas */
+        background: var(--chip);
         border-bottom: 1px solid var(--border);
-        padding: 6px;               /* small gutter so edges aren’t flush */
+        padding: 6px;
       }
-
-      /* Buttons */
-      .links { display:flex; gap:10px; margin-top:auto; }
-      .btn { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border:1px solid var(--border); border-radius:10px; text-decoration:none; color:var(--text); background: var(--chip); }
-      .btn:hover { border-color: var(--accent); }
-      .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
       footer { color: var(--muted); margin-top: 28px; text-align: center; }
       .empty { color: var(--muted); text-align:center; padding:20px; display:none; }
@@ -119,9 +112,6 @@
             <h3>GPT-2 LLM (124M) — from scratch</h3>
             <p class="muted">PyTorch • CUDA • Evaluation on HellaSwag with improved accuracy vs. baseline.</p>
             <div class="tags"><span class="tag">ML</span><span class="tag">Python</span></div>
-            <div class="links">
-              <a class="btn" href="https://github.com/USERNAME/gpt2-from-scratch" target="_blank" rel="noreferrer">Code</a>
-            </div>
           </div>
         </article>
 
@@ -152,9 +142,6 @@
             <h3>Course-it — Android academic planner</h3>
             <p class="muted">Flexible schedules with Kotlin/Java; Gradle + Git.</p>
             <div class="tags"><span class="tag">Android</span><span class="tag">Kotlin</span></div>
-            <div class="links">
-              <a class="btn" href="https://kanvithi23.wixsite.com/2340-course-schedule" target="_blank" rel="noreferrer">Website</a>
-            </div>
           </div>
         </article>
       </section>
@@ -259,8 +246,7 @@
           /* ---------- Equalize details heights ---------- */
           function equalizeDetails() {
             const contents = Array.from(document.querySelectorAll('#grid .card .card-content'));
-            contents.forEach(el => (el.style.minHeight = '')); // reset
-            // compute tallest content block
+            contents.forEach(el => (el.style.minHeight = ''));
             let max = 0;
             contents.forEach(el => { max = Math.max(max, el.offsetHeight); });
             contents.forEach(el => (el.style.minHeight = max + 'px'));
@@ -269,7 +255,7 @@
             let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn.apply(null, args), d); };
           };
 
-          /* ---------- Auto-append GitHub repos (with top images) ---------- */
+          /* ---------- Auto-append GitHub repos (without link buttons) ---------- */
           async function loadRepos() {
             const username = 'USERNAME'; // <-- replace with your GitHub username
             const fallback = 'assets/default-thumb.svg'; // <-- add this file to your repo
@@ -281,7 +267,6 @@
               repos.slice(0, 9).forEach(r => {
                 if (r.fork) return;
 
-                // Use GitHub OpenGraph image; fallback if it fails
                 const og = r.full_name
                   ? `https://opengraph.githubassets.com/1/${r.full_name}`
                   : fallback;
@@ -297,10 +282,6 @@
                     <h3>${r.name.replace(/[-_]/g,' ')}</h3>
                     <p class="muted">${r.description ? r.description : 'No description provided.'}</p>
                     <div class="tags"><span class="tag">GitHub</span></div>
-                    <div class="links">
-                      <a class="btn" href="${r.html_url}" target="_blank" rel="noreferrer">Code</a>
-                      ${r.homepage ? `<a class="btn" href="${r.homepage}" target="_blank" rel="noreferrer">Demo</a>` : ''}
-                    </div>
                   </div>
                 `;
 
@@ -321,10 +302,8 @@
           /* initial layout */
           applyFilters();
           loadRepos();
-          // equalize details for the static cards too
           equalizeDetails();
 
-          // re-equalize on resize (texts reflow) and on search/filter changes
           window.addEventListener('resize', debounce(equalizeDetails, 200));
           document.getElementById('search')?.addEventListener('input', debounce(equalizeDetails, 100));
           document.querySelectorAll('.chip').forEach(ch => ch.addEventListener('click', () => {
