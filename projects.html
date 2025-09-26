@@ -44,34 +44,27 @@
       .grid { display:grid; grid-template-columns: 1fr; gap:16px; }
       @media (min-width: 820px) { .grid { grid-template-columns: repeat(3, 1fr); } }
 
-      .card { background: var(--card); border:1px solid var(--border); border-radius:18px; padding:16px; display:flex; flex-direction:column; gap:8px; opacity:.001; transform:translateY(8px); }
+      .card { background: var(--card); border:1px solid var(--border); border-radius:18px; padding:0; display:flex; flex-direction:column; opacity:.001; transform:translateY(8px); overflow:hidden; } /* CHANGED: padding=0, overflow hidden */
+      .card-content { padding:16px; display:flex; flex-direction:column; gap:8px; } /* NEW */
       .card h3 { margin:0; font-size:18px; }
       .tags { display:flex; gap:8px; flex-wrap:wrap; }
       .tag { font-size:12px; background: var(--chip); border:1px solid var(--border); border-radius:999px; padding:4px 8px; }
 
-      /* Buttons (used on some cards / loaded repos) */
+      /* NEW: top image block for all cards */
+      .thumb-top {
+        width: 100%;
+        aspect-ratio: 16 / 9; /* Keeps a consistent block height on GH Pages */
+        object-fit: cover;
+        display: block;
+        background: var(--chip);
+        border-bottom: 1px solid var(--border);
+      }
+
+      /* Buttons */
       .links { display:flex; gap:10px; margin-top:auto; }
       .btn { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border:1px solid var(--border); border-radius:10px; text-decoration:none; color:var(--text); background: var(--chip); }
       .btn:hover { border-color: var(--accent); }
       .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-      /* Foodify overlay layout */
-      .card.project { padding: 0; overflow: hidden; }
-      .card.project .media { position: relative; margin: 0; }
-      .card.project .thumb { width: 100%; display: block; object-fit: cover; height: auto; }
-      .card.project .overlay-text {
-        position: absolute; inset: 0 auto auto 0;
-        width: 100%; padding: 16px 16px 48px 16px;
-        color: #fff;
-        background: linear-gradient(180deg, rgba(0,0,0,.65) 0%, rgba(0,0,0,.35) 40%, rgba(0,0,0,0) 75%);
-        text-shadow: 0 1px 2px rgba(0,0,0,.4);
-      }
-      .card.project .overlay-text h3 { margin: 0 0 6px; font-size: clamp(18px, 2.2vw, 24px); }
-      .card.project .overlay-text p { margin: 0; font-size: clamp(12px, 1.6vw, 14px); opacity: .95; }
-      .card.project .bottom {
-        padding: 12px 16px 16px 16px;
-        display: flex; gap: 8px; flex-wrap: wrap;
-      }
 
       footer { color: var(--muted); margin-top: 28px; text-align: center; }
       .empty { color: var(--muted); text-align:center; padding:20px; display:none; }
@@ -89,50 +82,71 @@
       </nav>
 
       <section class="hero card">
-        <h1>Projects</h1>
-        <p class="muted">Filter by tag or search title/description. Click through for code, demos, or write-ups.</p>
-        <div class="toolbar">
-          <input id="search" class="search" type="search" placeholder="Search projects..." />
-          <button class="chip active" data-tag="all">All</button>
-          <button class="chip" data-tag="ml">ML</button>
-          <button class="chip" data-tag="fullstack">Full-stack</button>
-          <button class="chip" data-tag="android">Android</button>
-          <button class="chip" data-tag="systems">Systems</button>
+        <div class="card-content"><!-- wrap to keep spacing consistent -->
+          <h1>Projects</h1>
+          <p class="muted">Filter by tag or search title/description. Click through for code, demos, or write-ups.</p>
+          <div class="toolbar">
+            <input id="search" class="search" type="search" placeholder="Search projects..." />
+            <button class="chip active" data-tag="all">All</button>
+            <button class="chip" data-tag="ml">ML</button>
+            <button class="chip" data-tag="fullstack">Full-stack</button>
+            <button class="chip" data-tag="android">Android</button>
+            <button class="chip" data-tag="systems">Systems</button>
+          </div>
         </div>
       </section>
 
       <section id="grid" class="grid">
         <!-- GPT-2 -->
-        <article class="card" data-tags="ml python" data-search="gpt2 llm pytorch cuda fineweb hellaswag">
-          <h3>GPT-2 LLM (124M) — from scratch</h3>
-          <p class="muted">PyTorch • CUDA • Evaluation on HellaSwag with improved accuracy vs. baseline.</p>
-          <div class="tags"><span class="tag">ML</span><span class="tag">Python</span></div>
-          <div class="links">
-            <a class="btn" href="https://github.com/USERNAME/gpt2-from-scratch" target="_blank" rel="noreferrer">Code</a>
+        <article
+          class="card"
+          data-tags="ml python"
+          data-search="gpt2 llm pytorch cuda fineweb hellaswag"
+          data-thumb="assets/gpt2-thumb.png"  <!-- NEW: set a per-card image -->
+        >
+          <img class="thumb-top" src="assets/gpt2-thumb.png" alt="Thumbnail image for GPT-2 project" loading="lazy" />
+          <div class="card-content">
+            <h3>GPT-2 LLM (124M) — from scratch</h3>
+            <p class="muted">PyTorch • CUDA • Evaluation on HellaSwag with improved accuracy vs. baseline.</p>
+            <div class="tags"><span class="tag">ML</span><span class="tag">Python</span></div>
+            <div class="links">
+              <a class="btn" href="https://github.com/USERNAME/gpt2-from-scratch" target="_blank" rel="noreferrer">Code</a>
+            </div>
           </div>
         </article>
 
-        <!-- Foodify with overlay text on image and skills at bottom -->
-        <article class="card project" data-tags="fullstack react node mongo" data-search="mern foodify auth rest responsive">
-          <figure class="media">
-            <img class="thumb" src="assets/foodify.png" alt="Screenshot of Foodify app showing a list of food posts with images and titles." />
-            <figcaption class="overlay-text">
-              <h3>Foodify — MERN social food tracker</h3>
-              <p>Auth, REST APIs, responsive UI, and social feed.</p>
-            </figcaption>
-          </figure>
-          <div class="bottom tags">
-            <span class="tag">Full-stack</span><span class="tag">React</span>
+        <!-- Foodify (normalized layout: image on top, text below) -->
+        <article
+          class="card"
+          data-tags="fullstack react node mongo"
+          data-search="mern foodify auth rest responsive"
+          data-thumb="assets/foodify.png"
+        >
+          <img class="thumb-top" src="assets/foodify.png" alt="Screenshot of Foodify app" loading="lazy" />
+          <div class="card-content">
+            <h3>Foodify — MERN social food tracker</h3>
+            <p class="muted">Auth, REST APIs, responsive UI, and social feed.</p>
+            <div class="tags">
+              <span class="tag">Full-stack</span><span class="tag">React</span>
+            </div>
           </div>
         </article>
 
         <!-- Course-it -->
-        <article class="card" data-tags="android kotlin java" data-search="course it android scheduler planner gradle">
-          <h3>Course-it — Android academic planner</h3>
-          <p class="muted">Flexible schedules with Kotlin/Java; Gradle + Git.</p>
-          <div class="tags"><span class="tag">Android</span><span class="tag">Kotlin</span></div>
-          <div class="links">
-            <a class="btn" href="https://kanvithi23.wixsite.com/2340-course-schedule" target="_blank" rel="noreferrer">Website</a>
+        <article
+          class="card"
+          data-tags="android kotlin java"
+          data-search="course it android scheduler planner gradle"
+          data-thumb="assets/course-it.png"
+        >
+          <img class="thumb-top" src="assets/course-it.png" alt="Screenshot of Course-it Android planner" loading="lazy" />
+          <div class="card-content">
+            <h3>Course-it — Android academic planner</h3>
+            <p class="muted">Flexible schedules with Kotlin/Java; Gradle + Git.</p>
+            <div class="tags"><span class="tag">Android</span><span class="tag">Kotlin</span></div>
+            <div class="links">
+              <a class="btn" href="https://kanvithi23.wixsite.com/2340-course-schedule" target="_blank" rel="noreferrer">Website</a>
+            </div>
           </div>
         </article>
       </section>
@@ -234,9 +248,10 @@
 
           search?.addEventListener('input', applyFilters);
 
-          /* ---------- Optional: auto-append GitHub repos ---------- */
+          /* ---------- Auto-append GitHub repos (with top images) ---------- */
           async function loadRepos() {
-            const username = 'USERNAME'; // <-- replace
+            const username = 'USERNAME'; // <-- replace with your GitHub username
+            const fallback = 'assets/default-thumb.svg'; // <-- add this file to your repo
             try {
               const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
               if (!res.ok) return;
@@ -244,19 +259,30 @@
               const grid = document.getElementById('grid');
               repos.slice(0, 9).forEach(r => {
                 if (r.fork) return;
+
+                // Attempt to use GitHub’s OpenGraph image for the repo; fallback if blocked or missing
+                const og = r.full_name
+                  ? `https://opengraph.githubassets.com/1/${r.full_name}`
+                  : fallback;
+
                 const card = document.createElement('article');
                 card.className = 'card';
-                card.dataset.tags = 'fullstack';
+                card.dataset.tags = 'fullstack'; // adjust if you want smarter tagging
                 card.dataset.search = (r.name + ' ' + (r.description || '')).toLowerCase();
+
                 card.innerHTML = `
-                  <h3>${r.name.replace(/[-_]/g,' ')}</h3>
-                  <p class="muted">${r.description || 'No description provided.'}</p>
-                  <div class="tags"><span class="tag">GitHub</span></div>
-                  <div class="links">
-                    <a class="btn" href="${r.html_url}" target="_blank" rel="noreferrer">Code</a>
-                    ${r.homepage ? `<a class="btn" href="${r.homepage}" target="_blank" rel="noreferrer">Demo</a>` : ''}
+                  <img class="thumb-top" src="${og}" alt="Open Graph thumbnail for ${r.name}" loading="lazy" onerror="this.src='${fallback}'" />
+                  <div class="card-content">
+                    <h3>${r.name.replace(/[-_]/g,' ')}</h3>
+                    <p class="muted">${r.description ? r.description : 'No description provided.'}</p>
+                    <div class="tags"><span class="tag">GitHub</span></div>
+                    <div class="links">
+                      <a class="btn" href="${r.html_url}" target="_blank" rel="noreferrer">Code</a>
+                      ${r.homepage ? `<a class="btn" href="${r.homepage}" target="_blank" rel="noreferrer">Demo</a>` : ''}
+                    </div>
                   </div>
                 `;
+
                 grid.appendChild(card);
                 try { obs && obs.observe(card); } catch (_) {
                   card.style.opacity='1'; card.style.transform='translateY(0)';
