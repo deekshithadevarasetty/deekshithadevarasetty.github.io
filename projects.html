@@ -12,10 +12,18 @@
       :root {
         --bg: #0b1220; --card: #111a2b; --text: #e6ecff; --muted: #98a2b3;
         --accent: #5b8cff; --chip: #1c2842; --border: #22314f;
+        /* new: consistent image + details sizes */
+        --thumb-h: 200px;
       }
       :root[data-theme="light"] {
         --bg: #f7f9ff; --card: #ffffff; --text: #0f1730; --muted: #475467;
         --accent: #3b6cff; --chip: #eef2ff; --border: #d6dcf0;
+      }
+      @media (min-width: 820px) {
+        :root { --thumb-h: 220px; }
+      }
+      @media (min-width: 1080px) {
+        :root { --thumb-h: 240px; }
       }
 
       * { box-sizing: border-box; }
@@ -44,20 +52,22 @@
       .grid { display:grid; grid-template-columns: 1fr; gap:16px; }
       @media (min-width: 820px) { .grid { grid-template-columns: repeat(3, 1fr); } }
 
-      .card { background: var(--card); border:1px solid var(--border); border-radius:18px; padding:0; display:flex; flex-direction:column; opacity:.001; transform:translateY(8px); overflow:hidden; } /* CHANGED: padding=0, overflow hidden */
-      .card-content { padding:16px; display:flex; flex-direction:column; gap:8px; } /* NEW */
+      .card { background: var(--card); border:1px solid var(--border); border-radius:18px; padding:0; display:flex; flex-direction:column; opacity:.001; transform:translateY(8px); overflow:hidden; }
+      .card-content { padding:16px; display:flex; flex-direction:column; gap:8px; }
       .card h3 { margin:0; font-size:18px; }
       .tags { display:flex; gap:8px; flex-wrap:wrap; }
       .tag { font-size:12px; background: var(--chip); border:1px solid var(--border); border-radius:999px; padding:4px 8px; }
 
-      /* NEW: top image block for all cards */
+      /* Top image: show entire image (no crop) inside a consistent box height */
       .thumb-top {
         width: 100%;
-        aspect-ratio: 16 / 9; /* Keeps a consistent block height on GH Pages */
-        object-fit: cover;
+        height: var(--thumb-h);     /* fixed, responsive height */
+        object-fit: contain;        /* <-- show full image */
+        object-position: center;
         display: block;
-        background: var(--chip);
+        background: var(--chip);    /* letterbox color behind transparent areas */
         border-bottom: 1px solid var(--border);
+        padding: 6px;               /* small gutter so edges aren’t flush */
       }
 
       /* Buttons */
@@ -82,7 +92,7 @@
       </nav>
 
       <section class="hero card">
-        <div class="card-content"><!-- wrap to keep spacing consistent -->
+        <div class="card-content">
           <h1>Projects</h1>
           <p class="muted">Filter by tag or search title/description. Click through for code, demos, or write-ups.</p>
           <div class="toolbar">
@@ -102,7 +112,7 @@
           class="card"
           data-tags="ml python"
           data-search="gpt2 llm pytorch cuda fineweb hellaswag"
-          data-thumb="assets/gpt2.png"  <!-- NEW: set a per-card image -->
+          data-thumb="assets/gpt2.png"
         >
           <img class="thumb-top" src="assets/gpt2.png" alt="Thumbnail image for GPT-2 project" loading="lazy" />
           <div class="card-content">
@@ -115,7 +125,7 @@
           </div>
         </article>
 
-        <!-- Foodify (normalized layout: image on top, text below) -->
+        <!-- Foodify -->
         <article
           class="card"
           data-tags="fullstack react node mongo"
@@ -126,9 +136,7 @@
           <div class="card-content">
             <h3>Foodify — MERN social food tracker</h3>
             <p class="muted">Auth, REST APIs, responsive UI, and social feed.</p>
-            <div class="tags">
-              <span class="tag">Full-stack</span><span class="tag">React</span>
-            </div>
+            <div class="tags"><span class="tag">Full-stack</span><span class="tag">React</span></div>
           </div>
         </article>
 
@@ -248,26 +256,39 @@
 
           search?.addEventListener('input', applyFilters);
 
+          /* ---------- Equalize details heights ---------- */
+          function equalizeDetails() {
+            const contents = Array.from(document.querySelectorAll('#grid .card .card-content'));
+            contents.forEach(el => (el.style.minHeight = '')); // reset
+            // compute tallest content block
+            let max = 0;
+            contents.forEach(el => { max = Math.max(max, el.offsetHeight); });
+            contents.forEach(el => (el.style.minHeight = max + 'px'));
+          }
+          const debounce = (fn, d=150) => {
+            let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn.apply(null, args), d); };
+          };
+
           /* ---------- Auto-append GitHub repos (with top images) ---------- */
           async function loadRepos() {
             const username = 'USERNAME'; // <-- replace with your GitHub username
             const fallback = 'assets/default-thumb.svg'; // <-- add this file to your repo
             try {
               const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
-              if (!res.ok) return;
+              if (!res.ok) { applyFilters(); equalizeDetails(); return; }
               const repos = await res.json();
               const grid = document.getElementById('grid');
               repos.slice(0, 9).forEach(r => {
                 if (r.fork) return;
 
-                // Attempt to use GitHub’s OpenGraph image for the repo; fallback if blocked or missing
+                // Use GitHub OpenGraph image; fallback if it fails
                 const og = r.full_name
                   ? `https://opengraph.githubassets.com/1/${r.full_name}`
                   : fallback;
 
                 const card = document.createElement('article');
                 card.className = 'card';
-                card.dataset.tags = 'fullstack'; // adjust if you want smarter tagging
+                card.dataset.tags = 'fullstack';
                 card.dataset.search = (r.name + ' ' + (r.description || '')).toLowerCase();
 
                 card.innerHTML = `
@@ -288,12 +309,27 @@
                   card.style.opacity='1'; card.style.transform='translateY(0)';
                 }
               });
+
               applyFilters();
-            } catch (_) {}
+              equalizeDetails();
+            } catch (_) {
+              applyFilters();
+              equalizeDetails();
+            }
           }
 
+          /* initial layout */
           applyFilters();
           loadRepos();
+          // equalize details for the static cards too
+          equalizeDetails();
+
+          // re-equalize on resize (texts reflow) and on search/filter changes
+          window.addEventListener('resize', debounce(equalizeDetails, 200));
+          document.getElementById('search')?.addEventListener('input', debounce(equalizeDetails, 100));
+          document.querySelectorAll('.chip').forEach(ch => ch.addEventListener('click', () => {
+            setTimeout(equalizeDetails, 0);
+          }));
         });
       })();
     </script>
