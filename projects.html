@@ -104,13 +104,13 @@
         <article
           class="card"
           data-tags="ml python"
-          data-search="gpt2 llm pytorch cuda fineweb hellaswag"
+          data-search="gpt2 llm pytorch cuda huggingface fineweb hellaswag"
           data-thumb="assets/gpt2.png"
         >
           <img class="thumb-top" src="assets/gpt2.png" alt="Thumbnail image for GPT-2 project" loading="lazy" />
           <div class="card-content">
             <h3>GPT-2 LLM (124M) — from scratch</h3>
-            <p class="muted">PyTorch • CUDA • Evaluation on HellaSwag with improved accuracy vs. baseline.</p>
+            <p class="muted">PyTorch • HuggingFace • CUDA • Evaluation on HellaSwag with improved accuracy vs. baseline.</p>
             <div class="tags"><span class="tag">ML</span><span class="tag">Python</span></div>
           </div>
         </article>
@@ -257,7 +257,7 @@
 
           /* ---------- Auto-append GitHub repos (without link buttons) ---------- */
           async function loadRepos() {
-            const username = 'USERNAME'; // <-- replace with your GitHub username
+            const username = 'deekshithadevarasetty'; // <-- your GitHub username
             const fallback = 'assets/default-thumb.svg'; // <-- add this file to your repo
             try {
               const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
