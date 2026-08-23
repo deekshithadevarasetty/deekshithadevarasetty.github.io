@@ -280,7 +280,7 @@
                   <img class="thumb-top" src="${og}" alt="Open Graph thumbnail for ${r.name}" loading="lazy" onerror="this.src='${fallback}'" />
                   <div class="card-content">
                     <h3>${r.name.replace(/[-_]/g,' ')}</h3>
-                    <p class="muted">${r.description ? r.description : 'No description provided.'}</p>
+                    ${r.description ? `<p class="muted">${r.description}</p>` : ''}
                     <div class="tags"><span class="tag">GitHub</span></div>
                   </div>
                 `;
